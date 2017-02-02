@@ -20,6 +20,7 @@ import {XLargeDirective} from "./home/x-large";
 import "../styles/styles.scss";
 import "../styles/headings.css";
 import {DynamicModule} from "./dynamic/dynamic.module";
+import {AOTModule} from "./dynamic/aot.module";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -43,14 +44,15 @@ type StoreType = {
     AboutComponent,
     HomeComponent,
     NoContentComponent,
-    XLargeDirective,
+    XLargeDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule,
     FormsModule,
     HttpModule,
     RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
-    DynamicModule
+    DynamicModule,
+    AOTModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

@@ -1,4 +1,7 @@
-import {Component, Input, ViewContainerRef, ViewChild, ComponentRef, ComponentFactory, NgModule} from "@angular/core";
+import {
+  Component, Input, ViewContainerRef, ViewChild, ComponentRef, ComponentFactory, NgModule,
+  AfterViewInit
+} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 import {RouterModule} from "@angular/router";
 import {CommonModule} from "@angular/common";
@@ -11,65 +14,20 @@ interface IDynamicComponent {
 
 @Component({
   selector: 'dynamic',
-  providers: [],
-  styleUrls: ['./dynamic.component.css'],
   templateUrl: './dynamic.component.html'
 })
-export class MainDynamicComponent {
+export class MainDynamicComponent implements AfterViewInit {
 
-  private container$: BehaviorSubject<ViewContainerRef> = new BehaviorSubject<ViewContainerRef>(null);
-  private template$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-
-  public templateStr: string = `\<p\>Dynamic\<\/p\>\<aot-component\>AOT component\<\/aot-component\>`;
-
-  @Input()
-  public set template(template: string) {
-    console.log('set template');
-    this.template$.next(template);
-  }
-
-  public get template() {
-    return this.template$.getValue();
-  }
+  private template: string = `<p>Dynamic</p><aot-component>AOT component</aot-component>`;
 
   @ViewChild('container', {read: ViewContainerRef})
-  public set container(container: ViewContainerRef) {
-    this.container$.next(container);
-  }
-
-  public get container() {
-    return this.container$.getValue();
-  }
+  container: ViewContainerRef;
 
   private componentRef: ComponentRef<IDynamicComponent>;
 
-  constructor() {
-    console.log('created');
-    Observable.combineLatest(this.container$, this.template$.distinctUntilChanged(),
-      (container, template) => !!container)
-      .filter(ready => ready)
-      .subscribe(() => this.build());
-  }
-
-  private build() {
-    console.log('build');
-    this.destroy();
-    if (this.template) {
-      let factory = this.createComponentFactory(this.template);
-      this.componentRef = this.container.createComponent(factory);
-    }
-  }
-
-  private destroy() {
-    if (this.componentRef) {
-      console.log('destroy');
-      this.componentRef.destroy();
-      this.componentRef = null;
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroy();
+  ngAfterViewInit(){
+    let factory = this.createComponentFactory(this.template);
+    this.componentRef = this.container.createComponent(factory);
   }
 
   private createComponentFactory(template: string): ComponentFactory<IDynamicComponent> {

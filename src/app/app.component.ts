@@ -52,7 +52,11 @@ import { AppState } from './app.service';
       </div>
     </footer>
     
+    <h1>aot-component into dynamic not works!</h1>
     <dynamic></dynamic>
+    
+    <h1>Direct insert works!</h1>
+    <aot-component>It works!</aot-component>
   `
 })
 export class AppComponent implements OnInit {

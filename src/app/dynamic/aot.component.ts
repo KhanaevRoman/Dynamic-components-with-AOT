@@ -2,8 +2,7 @@ import {Component, ElementRef, ViewChild, AfterViewInit} from "@angular/core";
 
 @Component({
   selector: 'aot-component',
-  templateUrl: './aot.component.html',
-  styleUrls: []
+  templateUrl: './aot.component.html'
 })
 
 export class AOTComponent implements AfterViewInit {
@@ -12,6 +11,7 @@ export class AOTComponent implements AfterViewInit {
   public container: ElementRef;
 
   ngAfterViewInit() {
-    console.log(this.container.nativeElement);
+    console.log('AOTComponent.container >');
+    console.log(this.container); // <- undefined here!
   }
 }
